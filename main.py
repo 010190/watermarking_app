@@ -1,27 +1,60 @@
 from tkinter import *
 from tkinter import filedialog
-from PIL import Image, ImageTk
+from tkinter.simpledialog import askstring
 
+from PIL import Image, ImageTk, ImageDraw
 
 app = Tk()
 app.title("Watermark application")
 
 
 def browseFiles():
-    filename = filedialog.askopenfilename(initialdir="/",
+    filename = filedialog.askopenfilename(initialdir="/Desktop",
                                           title="Select a File",
-                                          filetypes=((".JPG", "*.JPG"
-                                                      "*.JPEG*"),
+                                          filetypes=(("images", ".jpg"
+                                                      ".jpeg"),
                                                      ("all files",
                                                       "*.*")))
 
-    im = Image.open(filename)
-    im = im.resize((200,200))
-    render = ImageTk.PhotoImage(im)
-    my_var = Label(app, image=render,width=200, height=200)
-    my_var.image = render
 
-    my_var.grid(row=5, column=1)
+    if filename:
+
+        dialog = Toplevel()
+        im = Image.open(filename)
+
+        im = im.resize((200,200))
+
+        render = ImageTk.PhotoImage(im)
+        my_var = Label(dialog, image=render,width=200, height=200)
+        my_var.image = render
+        my_var.grid(row=1, column=1)
+
+
+        def on_screen_keyboard():
+            text = askstring(prompt="text", title="Enter text")
+            edit = ImageDraw.Draw(im)
+            edit.text((0, 0), text=text, fill=(255, 0, 0))
+
+            new_im = ImageTk.PhotoImage(im)
+            my_var.configure(image=new_im)
+            my_var.grid(row=1, column=1)
+            my_var.image = new_im
+
+        def add_symbol():
+            pass
+
+        def save():
+            pass
+
+        add_text = Button(dialog, text="Add text", command=on_screen_keyboard)
+        add_text.grid(row=2, column=1, sticky=E)
+        add_sym = Button(dialog, text="Add symbol")
+        add_sym.grid(row=2, column=1, sticky=W)
+
+
+
+
+
 
 content = Frame(app)
 
