@@ -1,11 +1,18 @@
 from tkinter import *
-from tkinter import filedialog
+from tkinter import filedialog, font, colorchooser
 from tkinter.simpledialog import askstring
+from tkinter.ttk import Combobox
 
 from PIL import Image, ImageTk, ImageDraw
 
 app = Tk()
 app.title("Watermark application")
+
+fonts = list(font.families())
+
+font_size = [num for num in range(1,50)]
+
+
 
 
 def browseFiles():
@@ -29,6 +36,10 @@ def browseFiles():
         my_var.image = render
         my_var.grid(row=1, column=1)
 
+        def choose_color():
+            # variable to store hexadecimal code of color
+            color_code = colorchooser.askcolor(title="Choose color")
+
 
         def on_screen_keyboard():
             text = askstring(prompt="text", title="Enter text")
@@ -44,7 +55,14 @@ def browseFiles():
             pass
 
         def save():
-            pass
+            global new_im
+            global text
+            new_im.save(f"{text}.jpg")
+
+
+
+        choose_font = Combobox(dialog, values=fonts)
+
 
         add_text = Button(dialog, text="Add text", command=on_screen_keyboard)
         add_text.grid(row=2, column=1, sticky=E)
@@ -52,9 +70,17 @@ def browseFiles():
         add_sym.grid(row=2, column=1, sticky=W)
 
 
+        save_button = Button(dialog, text="Save", command=save)
+        save_button.grid(row=2, column=2, sticky=E)
 
+        choose_font.grid(row=3, column=1, sticky=W)
 
+        choose_size = Combobox(dialog,  values=font_size)
+        choose_size.grid(row=3, column=2, sticky=W)
 
+        color_button = Button(dialog, text="Select color",
+                        command=choose_color)
+        color_button.grid(row=3, column=3, sticky=W)
 
 content = Frame(app)
 
