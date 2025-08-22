@@ -2,8 +2,9 @@ from tkinter import *
 from tkinter import filedialog, font, colorchooser
 from tkinter.simpledialog import askstring
 from tkinter.ttk import Combobox
+from matplotlib import colors
 
-from PIL import Image, ImageTk, ImageDraw
+from PIL import Image, ImageTk, ImageDraw, ImageFont
 
 app = Tk()
 app.title("Watermark application")
@@ -12,14 +13,15 @@ fonts = list(font.families())
 
 font_size = [num for num in range(1,50)]
 
-
+var_font = StringVar()
+var_size = StringVar()
 
 
 def browseFiles():
     filename = filedialog.askopenfilename(initialdir="/Desktop",
                                           title="Select a File",
-                                          filetypes=(("images", ".jpg"
-                                                      ".jpeg"),
+                                          filetypes=(("images", "*.jpg"
+                                                      "*.jpeg"),
                                                      ("all files",
                                                       "*.*")))
 
@@ -36,15 +38,25 @@ def browseFiles():
         my_var.image = render
         my_var.grid(row=1, column=1)
 
-        def choose_color():
-            # variable to store hexadecimal code of color
-            color_code = colorchooser.askcolor(title="Choose color")
+        # def choose_color():
+        #     # variable to store hexadecimal code of color
+
+
 
 
         def on_screen_keyboard():
+            color_code = colorchooser.askcolor(title="Choose color")[0]
+
+
             text = askstring(prompt="text", title="Enter text")
+            font_name = var_font.get()
+            font_size = int(var_size.get())
+
+            font = ImageFont.truetype("arial.ttf", font_size)
+
+
             edit = ImageDraw.Draw(im)
-            edit.text((0, 0), text=text, fill=(255, 0, 0))
+            edit.text((0, 0), text=text, fill=color_code, font=font)
 
             new_im = ImageTk.PhotoImage(im)
             my_var.configure(image=new_im)
@@ -59,9 +71,16 @@ def browseFiles():
             global text
             new_im.save(f"{text}.jpg")
 
+        choose_size = Combobox(dialog, values=font_size, textvariable=var_size,)
+        choose_size.grid(row=3, column=2, sticky=W)
 
 
-        choose_font = Combobox(dialog, values=fonts)
+
+
+        # color_button = Button(dialog, text="Select color",
+        #                       command=choose_color)
+        # color_button.grid(row=3, column=3, sticky=W)
+        choose_font = Combobox(dialog, values=fonts, textvariable=var_font,)
 
 
         add_text = Button(dialog, text="Add text", command=on_screen_keyboard)
@@ -75,12 +94,7 @@ def browseFiles():
 
         choose_font.grid(row=3, column=1, sticky=W)
 
-        choose_size = Combobox(dialog,  values=font_size)
-        choose_size.grid(row=3, column=2, sticky=W)
 
-        color_button = Button(dialog, text="Select color",
-                        command=choose_color)
-        color_button.grid(row=3, column=3, sticky=W)
 
 content = Frame(app)
 
