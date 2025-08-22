@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import filedialog, font, colorchooser
-from tkinter.simpledialog import askstring
+from tkinter.simpledialog import askstring, askinteger
 from tkinter.ttk import Combobox
 from matplotlib import colors
 
@@ -49,15 +49,19 @@ def browseFiles():
 
 
             text = askstring(prompt="text", title="Enter text")
-            font_name = var_font.get()
-            font_size = int(var_size.get())
+            # font_name = var_font.get()
+            # font_size = int(var_size.get())
 
-            font = ImageFont.truetype("arial.ttf", font_size)
+
+            x = askinteger(title="Enter x", prompt="Enter x")
+            y = askinteger(title="Enter y", prompt="Enter y")
 
 
             edit = ImageDraw.Draw(im)
-            edit.text((0, 0), text=text, fill=color_code, font=font)
+            size = askinteger(title="Enter size", prompt="Enter size")
+            font = ImageFont.truetype("arial.ttf", size)
 
+            edit.text((x,y), text=text, fill=color_code, font=font)
             new_im = ImageTk.PhotoImage(im)
             my_var.configure(image=new_im)
             my_var.grid(row=1, column=1)
@@ -71,8 +75,8 @@ def browseFiles():
             global text
             new_im.save(f"{text}.jpg")
 
-        choose_size = Combobox(dialog, values=font_size, textvariable=var_size,)
-        choose_size.grid(row=3, column=2, sticky=W)
+        # choose_size = Combobox(dialog, values=font_size, textvariable=var_size,)
+        # choose_size.grid(row=3, column=2, sticky=W)
 
 
 
