@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import filedialog, font, colorchooser
+from tkinter.messagebox import askquestion
 from tkinter.simpledialog import askstring, askinteger
 from tkinter.ttk import Combobox
 from matplotlib import colors
@@ -38,20 +39,13 @@ def browseFiles():
         my_var.image = render
         my_var.grid(row=1, column=1)
 
-        # def choose_color():
-        #     # variable to store hexadecimal code of color
 
-
-
-
-        def on_screen_keyboard():
+        def text_watermark():
             color_code = colorchooser.askcolor(title="Choose color")[0]
 
 
             text = askstring(prompt="text", title="Enter text")
-            # font_name = var_font.get()
-            # font_size = int(var_size.get())
-
+            
 
             x = askinteger(title="Enter x", prompt="Enter x")
             y = askinteger(title="Enter y", prompt="Enter y")
@@ -67,34 +61,29 @@ def browseFiles():
             my_var.grid(row=1, column=1)
             my_var.image = new_im
 
-        def add_symbol():
-            pass
+            save = askquestion(title="Do you want to save this image?",message="Would you like to save this image?")
+            if save == "yes":
+                im.save(f"{text}.jpg")
 
-        def save():
-            global new_im
-            global text
-            new_im.save(f"{text}.jpg")
-
-        # choose_size = Combobox(dialog, values=font_size, textvariable=var_size,)
-        # choose_size.grid(row=3, column=2, sticky=W)
-
-
+        # def add_symbol():
+        #     pass
+        #
+        # def save():
+        #     global new_im
+        #     global text
 
 
-        # color_button = Button(dialog, text="Select color",
-        #                       command=choose_color)
-        # color_button.grid(row=3, column=3, sticky=W)
         choose_font = Combobox(dialog, values=fonts, textvariable=var_font,)
 
 
-        add_text = Button(dialog, text="Add text", command=on_screen_keyboard)
+        add_text = Button(dialog, text="Add text", command=text_watermark)
         add_text.grid(row=2, column=1, sticky=E)
         add_sym = Button(dialog, text="Add symbol")
         add_sym.grid(row=2, column=1, sticky=W)
 
 
-        save_button = Button(dialog, text="Save", command=save)
-        save_button.grid(row=2, column=2, sticky=E)
+        # save_button = Button(dialog, text="Save", command=save)
+        # save_button.grid(row=2, column=2, sticky=E)
 
         choose_font.grid(row=3, column=1, sticky=W)
 
